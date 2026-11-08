@@ -1,0 +1,13 @@
+type: api
+runtime:
+  name: python@3.13
+  health_path: /healthz
+  readiness_timeout_seconds: 120
+scaffold_cmd: cp -rn /app/. /workspace/ && rm -f /workspace/adios.yaml
+dependency_cmd: python -m pip install -r requirements.txt
+start_cmd: |
+  python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080} --workers ${UVICORN_WORKERS:-2}
+env:
+  PORT: "8080"
+  PYTHONUNBUFFERED: "1"
+  UVICORN_WORKERS: "2"
